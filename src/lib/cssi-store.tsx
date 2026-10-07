@@ -48,7 +48,13 @@ export function CSSIProvider({ children }: { children: ReactNode }) {
       setSignedIn,
       records,
       setRecords,
-      getEngagement: (id) => records.find((record) => record.id === id) ?? records.find((record) => record.id === "pioneer") ?? engagements[2]!,
+      getEngagement: (id) => {
+        const found = records.find((record) => record.id === id);
+        if (found) return found;
+        const fallback = records.find((record) => record.id === "pioneer");
+        if (fallback) return fallback;
+        return { id: "pioneer", client: "Pioneer Systems", years: "2024–2025", capture: "Manual", status: "Ready to run", stage: "Inputs validated", date: "Sep 21, 2026", owner: "J. Smith", projects: pioneerProjects };
+      },
       replaceProjects: (id, projects) => setRecords((current) => current.map((record) => record.id === id ? { ...record, projects } : record)),
       confirmed: confirmedMap,
       confirmProject: (projectId, verdict) => setConfirmedMap((current) => ({ ...current, [projectId]: verdict })),
